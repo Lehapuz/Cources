@@ -235,7 +235,7 @@ public class RepositoryImpl implements Repository {
     }
 
     private Optional<Student> getStudentById(int id) {
-        String sql = "SELECT * FROM teachers WHERE id = ?";
+        String sql = "SELECT * FROM students WHERE id = ?";
         try {
             Connection connection = ConnectionPool.getInstance().takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
