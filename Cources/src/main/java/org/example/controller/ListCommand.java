@@ -22,9 +22,11 @@ public class ListCommand {
     private static final String TEACHER_NAME = "teacherName";
     private static final String STUDENT_NAME = "studentName";
     private static final String AGE = "age";
+    private static final String FORMAT = "application/json";
+    private static final String ENCODING = "UTF-8";
     private final MessageResponseDto messageResponseDto = new MessageResponseDto("Operation has succeed");
 
-    private ListCommand(){        
+    private ListCommand() {
     }
 
     public static ListCommand getInstance() {
@@ -35,16 +37,15 @@ public class ListCommand {
     }
 
     public void addCourseWithTeacher(HttpServletRequest req, HttpServletResponse resp) {
-        AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto= new AddCourseWithTeacherRequestDto(
-          req.getParameter(COURSE_NAME), Integer.parseInt(req.getParameter(DURATION)),
+        AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto = new AddCourseWithTeacherRequestDto(
+                req.getParameter(COURSE_NAME), Integer.parseInt(req.getParameter(DURATION)),
                 Double.parseDouble(req.getParameter(PRICE)),
                 req.getParameter(TEACHER_NAME), Integer.parseInt(req.getParameter(AGE)));
-        System.out.println("list command" + req.getParameter(COURSE_NAME));
         ServiceInstance.getInstance().getService().addTeacher(addCourseWithTeacherRequestDto);
         ServiceInstance.getInstance().getService().addCourse(addCourseWithTeacherRequestDto);
         String json = new Gson().toJson(messageResponseDto);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType(FORMAT);
+        resp.setCharacterEncoding(ENCODING);
         try {
             resp.getWriter().write(json);
         } catch (IOException e) {
@@ -58,8 +59,8 @@ public class ListCommand {
         ServiceInstance.getInstance().getService().addStudent(addStudentWithCourseRequestDto);
         ServiceInstance.getInstance().getService().addSubscription(addStudentWithCourseRequestDto);
         String json = new Gson().toJson(messageResponseDto);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType(FORMAT);
+        resp.setCharacterEncoding(ENCODING);
         try {
             resp.getWriter().write(json);
         } catch (IOException e) {
@@ -70,8 +71,8 @@ public class ListCommand {
     public void getTeachers(HttpServletRequest req, HttpServletResponse resp) {
         List<TeacherResponseDto> teacherResponseDtoList = ServiceInstance.getInstance().getService().getAllTeachers();
         String json = new Gson().toJson(teacherResponseDtoList);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType(FORMAT);
+        resp.setCharacterEncoding(ENCODING);
         try {
             resp.getWriter().write(json);
         } catch (IOException e) {
@@ -83,8 +84,8 @@ public class ListCommand {
         List<CourseWithStudentsResponseDto> courseWithStudentsResponseDtost = ServiceInstance
                 .getInstance().getService().getAllCourses();
         String json = new Gson().toJson(courseWithStudentsResponseDtost);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType(FORMAT);
+        resp.setCharacterEncoding(ENCODING);
         try {
             resp.getWriter().write(json);
         } catch (IOException e) {

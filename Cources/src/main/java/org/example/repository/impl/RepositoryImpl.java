@@ -4,7 +4,6 @@ import org.example.dto.request.AddCourseWithTeacherRequestDto;
 import org.example.dto.request.AddStudentWithCourseRequestDto;
 import org.example.entities.Course;
 import org.example.entities.Student;
-import org.example.entities.Subscription;
 import org.example.entities.Teacher;
 import org.example.repository.ConnectionPool;
 import org.example.repository.Repository;
@@ -18,6 +17,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class RepositoryImpl implements Repository {
+
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String AGE = "age";
+    private static final String DURATION = "duration";
+    private static final String PRICE = "price";
+    private static final String TEACHER_ID = "teacher_id";
+    private static final String COURSE_ID = "course_id";
+    private static final String STUDENT_ID = "student_id";
+
+
     @Override
     public Optional<Teacher> getTeacherByName(String name) {
         String sql = "SELECT * FROM teachers WHERE name = ?";
@@ -28,9 +38,9 @@ public class RepositoryImpl implements Repository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Teacher teacher = new Teacher();
-                teacher.setId(resultSet.getInt("id"));
-                teacher.setName(resultSet.getString("name"));
-                teacher.setAge(resultSet.getInt("age"));
+                teacher.setId(resultSet.getInt(ID));
+                teacher.setName(resultSet.getString(NAME));
+                teacher.setAge(resultSet.getInt(AGE));
                 ConnectionPool.getInstance().givenAwayConnection(connection, preparedStatement, resultSet);
                 return Optional.of(teacher);
             }
@@ -51,10 +61,10 @@ public class RepositoryImpl implements Repository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Course course = new Course();
-                course.setId(resultSet.getInt("id"));
-                course.setName(resultSet.getString("name"));
-                course.setDuration(resultSet.getInt("duration"));
-                course.setPrice(resultSet.getDouble("price"));
+                course.setId(resultSet.getInt(ID));
+                course.setName(resultSet.getString(NAME));
+                course.setDuration(resultSet.getInt(DURATION));
+                course.setPrice(resultSet.getDouble(PRICE));
                 ConnectionPool.getInstance().givenAwayConnection(connection, preparedStatement, resultSet);
                 return Optional.of(course);
             }
@@ -75,9 +85,9 @@ public class RepositoryImpl implements Repository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Student student = new Student();
-                student.setId(resultSet.getInt("id"));
-                student.setName(resultSet.getString("name"));
-                student.setAge(resultSet.getInt("age"));
+                student.setId(resultSet.getInt(ID));
+                student.setName(resultSet.getString(NAME));
+                student.setAge(resultSet.getInt(AGE));
                 ConnectionPool.getInstance().givenAwayConnection(connection, preparedStatement, resultSet);
                 return Optional.of(student);
             }
@@ -167,19 +177,19 @@ public class RepositoryImpl implements Repository {
                 PreparedStatement subPreparedStatement = connection.prepareStatement(subSql);
                 ResultSet subResultSet = subPreparedStatement.executeQuery();
                 while (subResultSet.next()) {
-                    if (subResultSet.getInt("teacher_id") == resultSet.getInt("id")) {
+                    if (subResultSet.getInt(TEACHER_ID) == resultSet.getInt(ID)) {
                         Course course = new Course();
-                        course.setId(subResultSet.getInt("id"));
-                        course.setName(subResultSet.getString("name"));
-                        course.setDuration(subResultSet.getInt("duration"));
-                        course.setPrice(subResultSet.getDouble("price"));
+                        course.setId(subResultSet.getInt(ID));
+                        course.setName(subResultSet.getString(NAME));
+                        course.setDuration(subResultSet.getInt(DURATION));
+                        course.setPrice(subResultSet.getDouble(PRICE));
                         courses.add(course);
                     }
                 }
                 Teacher teacher = new Teacher();
-                teacher.setId(resultSet.getInt("id"));
-                teacher.setName(resultSet.getString("name"));
-                teacher.setAge(resultSet.getInt("age"));
+                teacher.setId(resultSet.getInt(ID));
+                teacher.setName(resultSet.getString(NAME));
+                teacher.setAge(resultSet.getInt(AGE));
                 teacher.setCourses(courses);
                 teachers.add(teacher);
             }
@@ -199,25 +209,21 @@ public class RepositoryImpl implements Repository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                System.out.println(resultSet.getInt("id") + " - main");
                 List<Student> students = new ArrayList<>();
                 String subSql = "SELECT * FROM subscriptions";
                 PreparedStatement subPreparedStatement = connection.prepareStatement(subSql);
                 ResultSet subResultSet = subPreparedStatement.executeQuery();
                 while (subResultSet.next()) {
-                    if (subResultSet.getInt("course_id") == resultSet.getInt("id")) {
-                        System.out.println(subResultSet.getInt("course_id"));
-                        System.out.println(subResultSet.getInt("student_id"));
-                        System.out.println(resultSet.getInt("id"));
-                        Optional<Student> student = getStudentById(subResultSet.getInt("student_id"));
+                    if (subResultSet.getInt(COURSE_ID) == resultSet.getInt(ID)) {
+                        Optional<Student> student = getStudentById(subResultSet.getInt(STUDENT_ID));
                         students.add(student.get());
                     }
                 }
                 Course course = new Course();
-                course.setId(resultSet.getInt("id"));
-                course.setName(resultSet.getString("name"));
-                course.setDuration(resultSet.getInt("duration"));
-                course.setPrice(resultSet.getDouble("price"));
+                course.setId(resultSet.getInt(ID));
+                course.setName(resultSet.getString(NAME));
+                course.setDuration(resultSet.getInt(DURATION));
+                course.setPrice(resultSet.getDouble(PRICE));
                 course.setStudents(students);
                 courses.add(course);
             }
@@ -237,9 +243,9 @@ public class RepositoryImpl implements Repository {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Student student = new Student();
-                student.setId(resultSet.getInt("id"));
-                student.setName(resultSet.getString("name"));
-                student.setAge(resultSet.getInt("age"));
+                student.setId(resultSet.getInt(ID));
+                student.setName(resultSet.getString(NAME));
+                student.setAge(resultSet.getInt(AGE));
                 ConnectionPool.getInstance().givenAwayConnection(connection, preparedStatement, resultSet);
                 return Optional.of(student);
             }
