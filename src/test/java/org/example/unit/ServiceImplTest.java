@@ -28,7 +28,7 @@ public final class ServiceImplTest {
     ServiceImpl service;
 
     @Test
-    void add_teacher() {
+    void add_teacher_test() {
         AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto = MockData.getAddCourseWithTeacherRequestDto();
         service.addTeacher(addCourseWithTeacherRequestDto);
         verify(repository).getTeacherByName("Slava", ConnectionPool.getInstance());
@@ -36,7 +36,7 @@ public final class ServiceImplTest {
     }
 
     @Test
-    void add_course() {
+    void add_course_test() {
         AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto = new AddCourseWithTeacherRequestDto();
         service.addCourse(addCourseWithTeacherRequestDto, MockData.getTeacher3().getId());
         verify(repository).addCourse(addCourseWithTeacherRequestDto, MockData.getTeacher3().getId(),
