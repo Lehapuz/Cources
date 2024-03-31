@@ -6,6 +6,7 @@ import org.example.dto.request.AddStudentWithCourseRequestDto;
 import org.example.dto.response.CourseWithStudentsResponseDto;
 import org.example.dto.response.MessageResponseDto;
 import org.example.dto.response.TeacherResponseDto;
+import org.example.repository.ConnectionPool;
 import org.example.service.ServiceInstance;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +42,10 @@ public class ListCommand {
                 req.getParameter(COURSE_NAME), Integer.parseInt(req.getParameter(DURATION)),
                 Double.parseDouble(req.getParameter(PRICE)),
                 req.getParameter(TEACHER_NAME), Integer.parseInt(req.getParameter(AGE)));
-        ServiceInstance.getInstance().getService().addTeacher(addCourseWithTeacherRequestDto);
+        ServiceInstance.getInstance().getService().addTeacher(addCourseWithTeacherRequestDto, ConnectionPool.getInstance());
         ServiceInstance.getInstance().getService().addCourse(addCourseWithTeacherRequestDto,
-                ServiceInstance.getInstance().getService().getTeacherByName(req.getParameter(TEACHER_NAME)).get().getId());
+                ServiceInstance.getInstance().getService().getTeacherByName(req.getParameter(TEACHER_NAME),
+                        ConnectionPool.getInstance()).get().getId(), ConnectionPool.getInstance());
         String json = new Gson().toJson(messageResponseDto);
         resp.setContentType(FORMAT);
         resp.setCharacterEncoding(ENCODING);
@@ -57,8 +59,8 @@ public class ListCommand {
     public void addStudent(HttpServletRequest req, HttpServletResponse resp) {
         AddStudentWithCourseRequestDto addStudentWithCourseRequestDto = new AddStudentWithCourseRequestDto(
                 req.getParameter(STUDENT_NAME), Integer.parseInt(req.getParameter(AGE)), req.getParameter(COURSE_NAME));
-        ServiceInstance.getInstance().getService().addStudent(addStudentWithCourseRequestDto);
-        ServiceInstance.getInstance().getService().addSubscription(addStudentWithCourseRequestDto);
+        ServiceInstance.getInstance().getService().addStudent(addStudentWithCourseRequestDto, ConnectionPool.getInstance());
+        ServiceInstance.getInstance().getService().addSubscription(addStudentWithCourseRequestDto, ConnectionPool.getInstance());
         String json = new Gson().toJson(messageResponseDto);
         resp.setContentType(FORMAT);
         resp.setCharacterEncoding(ENCODING);
@@ -70,7 +72,8 @@ public class ListCommand {
     }
 
     public void getTeachers(HttpServletRequest req, HttpServletResponse resp) {
-        List<TeacherResponseDto> teacherResponseDtoList = ServiceInstance.getInstance().getService().getAllTeachers();
+        List<TeacherResponseDto> teacherResponseDtoList = ServiceInstance.getInstance().getService()
+                .getAllTeachers(ConnectionPool.getInstance());
         String json = new Gson().toJson(teacherResponseDtoList);
         resp.setContentType(FORMAT);
         resp.setCharacterEncoding(ENCODING);
@@ -83,7 +86,7 @@ public class ListCommand {
 
     public void getCourses(HttpServletRequest req, HttpServletResponse resp) {
         List<CourseWithStudentsResponseDto> courseWithStudentsResponseDtost = ServiceInstance
-                .getInstance().getService().getAllCourses();
+                .getInstance().getService().getAllCourses(ConnectionPool.getInstance());
         String json = new Gson().toJson(courseWithStudentsResponseDtost);
         resp.setContentType(FORMAT);
         resp.setCharacterEncoding(ENCODING);

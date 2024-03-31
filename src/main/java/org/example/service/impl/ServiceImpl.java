@@ -26,36 +26,40 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public void addTeacher(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto) {
-        if (getTeacherByName(addCourseWithTeacherRequestDto.getTeacherName()).isEmpty()) {
-            repository.addTeacher(addCourseWithTeacherRequestDto, ConnectionPool.getInstance());
+    public void addTeacher(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto,
+                           ConnectionPool connectionPool) {
+        if (getTeacherByName(addCourseWithTeacherRequestDto.getTeacherName(), connectionPool).isEmpty()) {
+            repository.addTeacher(addCourseWithTeacherRequestDto, connectionPool);
         }
     }
 
     @Override
-    public void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, int teacherId) {
+    public void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, int teacherId,
+                          ConnectionPool connectionPool) {
         repository.addCourse(addCourseWithTeacherRequestDto,
-                teacherId, ConnectionPool.getInstance());
+                teacherId, connectionPool);
     }
 
     @Override
-    public void addStudent(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto) {
-        repository.addStudent(addStudentWithCourseRequestDto, ConnectionPool.getInstance());
+    public void addStudent(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto,
+                           ConnectionPool connectionPool) {
+        repository.addStudent(addStudentWithCourseRequestDto, connectionPool);
     }
 
     @Override
-    public void addSubscription(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto) {
+    public void addSubscription(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto,
+                                ConnectionPool connectionPool) {
         Optional<Student> student = repository.getStudentByName(addStudentWithCourseRequestDto.getStudentName(),
-                ConnectionPool.getInstance());
+                connectionPool);
         Optional<Course> course = repository.getCourseByName(addStudentWithCourseRequestDto.getCourseName(),
-                ConnectionPool.getInstance());
+                connectionPool);
         repository.addSubscription(student.get().getId(), course.get().getId(),
-                ConnectionPool.getInstance());
+                connectionPool);
     }
 
     @Override
-    public List<TeacherResponseDto> getAllTeachers() {
-        List<Teacher> teachers = repository.getAllTeachers(ConnectionPool.getInstance());
+    public List<TeacherResponseDto> getAllTeachers(ConnectionPool connectionPool) {
+        List<Teacher> teachers = repository.getAllTeachers(connectionPool);
         List<TeacherResponseDto> teacherResponseDtoList = new ArrayList<>();
         for (Teacher teacher : teachers) {
             List<CourseResponseDto> courseResponseDtoList = new ArrayList<>();
@@ -72,8 +76,8 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public List<CourseWithStudentsResponseDto> getAllCourses() {
-        List<Course> courses = repository.getAllCourses(ConnectionPool.getInstance());
+    public List<CourseWithStudentsResponseDto> getAllCourses(ConnectionPool connectionPool) {
+        List<Course> courses = repository.getAllCourses(connectionPool);
         List<CourseWithStudentsResponseDto> courseWithStudentsResponseDtoList = new ArrayList<>();
         for (Course course : courses) {
             List<StudentResponseDto> studentResponseDtoList = new ArrayList<>();
@@ -91,7 +95,7 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Optional<Teacher> getTeacherByName(String name) {
-        return repository.getTeacherByName(name, ConnectionPool.getInstance());
+    public Optional<Teacher> getTeacherByName(String name, ConnectionPool connectionPool) {
+        return repository.getTeacherByName(name, connectionPool);
     }
 }
