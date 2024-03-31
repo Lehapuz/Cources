@@ -11,21 +11,22 @@ import java.util.Optional;
 
 public interface Repository {
 
-    Optional<Teacher> getTeacherByName(String name);
+    Optional<Teacher> getTeacherByName(String name, ConnectionPool connectionPool);
 
-    Optional<Course> getCourseByName(String name);
+    Optional<Course> getCourseByName(String name, ConnectionPool connectionPool);
 
-    Optional<Student> getStudentByName(String name);
+    Optional<Student> getStudentByName(String name, ConnectionPool connectionPool);
 
-    void addTeacher(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto);
+    void addTeacher(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, ConnectionPool connectionPool);
 
-    void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, int teacherId);
+    void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, int teacherId,
+                   ConnectionPool connectionPool);
 
-    void addStudent(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto);
+    void addStudent(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto, ConnectionPool connectionPool);
     
-    void addSubscription(int studentId, int CourseId);
+    void addSubscription(int studentId, int CourseId, ConnectionPool connectionPool);
 
-    List<Teacher> getAllTeachers();
+    List<Teacher> getAllTeachers(ConnectionPool connectionPool);
 
-    List<Course> getAllCourses();
+    List<Course> getAllCourses(ConnectionPool connectionPool);
 }

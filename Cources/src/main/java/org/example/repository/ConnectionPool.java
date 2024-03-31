@@ -20,10 +20,20 @@ public class ConnectionPool {
     private static ConnectionPool instance;
 
 
-    private ConnectionPool() throws IOException, SQLException {
+    public ConnectionPool() throws IOException, SQLException {
         DBResources dbResources = DBResources.getInstance();
         dbResources.getResource();
         this.url = dbResources.getURL();
+        this.user = dbResources.getUser();
+        this.password = dbResources.getPASS();
+        this.poolSize = dbResources.getPoolSize();
+        initPoolData();
+    }
+
+    public ConnectionPool(String url) throws IOException, SQLException {
+        DBResources dbResources = DBResources.getInstance();
+        dbResources.getResource();
+        this.url = url;
         this.user = dbResources.getUser();
         this.password = dbResources.getPASS();
         this.poolSize = dbResources.getPoolSize();
@@ -47,6 +57,7 @@ public class ConnectionPool {
         Connection connection = null;
         try {
             connection = connectionBlockingQueue.take();
+            System.out.println(connectionBlockingQueue.size() + " - take connection");
 
             // If tables are not created
             connection.createStatement().execute("CREATE TABLE IF NOT EXISTS teachers(" +
@@ -75,6 +86,7 @@ public class ConnectionPool {
                     "FOREIGN KEY(course_id) REFERENCES courses(id))");
 
             givenAwayConnectionQueue.add(connection);
+            System.out.println(givenAwayConnectionQueue.size() + " - take connection");
         } catch (InterruptedException | SQLException e) {
             throw new RuntimeException("Can not create connection", e);
         }
@@ -87,6 +99,8 @@ public class ConnectionPool {
             statement.close();
             givenAwayConnectionQueue.take();
             connectionBlockingQueue.add(connection);
+            System.out.println(connectionBlockingQueue.size() + " - given away connection");
+            System.out.println(givenAwayConnectionQueue.size() + " - given away connection");
         } catch (SQLException e) {
             throw new RuntimeException("Statement or resultSet not closed", e);
         }
@@ -97,6 +111,8 @@ public class ConnectionPool {
             statement.close();
             givenAwayConnectionQueue.take();
             connectionBlockingQueue.add(connection);
+            System.out.println(connectionBlockingQueue.size() + " - given away connection");
+            System.out.println(givenAwayConnectionQueue.size() + " - given away connection");
         } catch (SQLException e) {
             throw new RuntimeException("Statement or resultSet not closed", e);
         }
