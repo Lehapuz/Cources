@@ -85,14 +85,14 @@ public final class ServiceImplTest {
     }
 
     @Test
-    void add_student() {
+    void add_student_test() {
         AddStudentWithCourseRequestDto addStudentWithCourseRequestDto = MockData.getAddStudentWithCourseRequestDto();
         service.addStudent(addStudentWithCourseRequestDto, connectionPool);
         verify(repository).addStudent(addStudentWithCourseRequestDto, connectionPool);
     }
 
     @Test
-    void add_subscription() {
+    void add_subscription_test() {
         AddStudentWithCourseRequestDto addStudentWithCourseRequestDto = MockData.getAddStudentWithCourseRequestDto();
         when(repository.getStudentByName(addStudentWithCourseRequestDto.getStudentName(), connectionPool))
                 .thenReturn(Optional.of(MockData.getStudent1()));
@@ -103,7 +103,7 @@ public final class ServiceImplTest {
     }
 
     @Test
-    void get_all_teachers() {
+    void get_all_teachers_test() {
         int expectedSize = 2;
         when(repository.getAllTeachers(connectionPool)).thenReturn(List
                 .of(MockData.getTeacher1(), MockData.getTeacher2()));
@@ -113,7 +113,7 @@ public final class ServiceImplTest {
     }
 
     @Test
-    void get_all_courses() {
+    void get_all_courses_test() {
         int expectedSize = 2;
         when(repository.getAllCourses(connectionPool)).thenReturn(List
                 .of(MockData.getCourse1(), MockData.getCourse2()));
@@ -122,7 +122,7 @@ public final class ServiceImplTest {
     }
 
     @Test
-    void get_teacher_by_name() {
+    void get_teacher_by_name_test() {
         int expectedId = 2;
         when(repository.getTeacherByName("Fedor", connectionPool))
                 .thenReturn(Optional.of(MockData.getTeacher2()));
