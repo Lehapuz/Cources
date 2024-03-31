@@ -42,7 +42,8 @@ public class ListCommand {
                 Double.parseDouble(req.getParameter(PRICE)),
                 req.getParameter(TEACHER_NAME), Integer.parseInt(req.getParameter(AGE)));
         ServiceInstance.getInstance().getService().addTeacher(addCourseWithTeacherRequestDto);
-        ServiceInstance.getInstance().getService().addCourse(addCourseWithTeacherRequestDto);
+        ServiceInstance.getInstance().getService().addCourse(addCourseWithTeacherRequestDto,
+                ServiceInstance.getInstance().getService().getTeacherByName(req.getParameter(TEACHER_NAME)).get().getId());
         String json = new Gson().toJson(messageResponseDto);
         resp.setContentType(FORMAT);
         resp.setCharacterEncoding(ENCODING);

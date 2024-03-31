@@ -7,12 +7,13 @@ import org.example.dto.response.TeacherResponseDto;
 import org.example.entities.Teacher;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Service {
 
     void addTeacher(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto);
 
-    void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto);
+    void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, int teacherId);
 
     void addStudent(AddStudentWithCourseRequestDto addStudentWithCourseRequestDto);
 
@@ -21,4 +22,6 @@ public interface Service {
     List<TeacherResponseDto> getAllTeachers();
 
     List<CourseWithStudentsResponseDto> getAllCourses();
+
+    Optional<Teacher> getTeacherByName(String name);
 }

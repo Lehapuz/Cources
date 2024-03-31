@@ -33,10 +33,9 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto) {
+    public void addCourse(AddCourseWithTeacherRequestDto addCourseWithTeacherRequestDto, int teacherId) {
         repository.addCourse(addCourseWithTeacherRequestDto,
-                getTeacherByName(addCourseWithTeacherRequestDto.getTeacherName()).get().getId(),
-                ConnectionPool.getInstance());
+                teacherId, ConnectionPool.getInstance());
     }
 
     @Override
@@ -91,7 +90,8 @@ public class ServiceImpl implements Service {
         return courseWithStudentsResponseDtoList;
     }
 
-    private Optional<Teacher> getTeacherByName(String name) {
+    @Override
+    public Optional<Teacher> getTeacherByName(String name) {
         return repository.getTeacherByName(name, ConnectionPool.getInstance());
     }
 }
